@@ -1,0 +1,36 @@
+{
+  "extends": "@nrwl/workspace/presets/core.json",
+  "npmScope": "tinybox",
+  "affected": {
+    "defaultBase": "main"
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/node"
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nrwl/nx-cloud",
+      "options": {
+        "cacheableOperations": ["build", "lint", "test", "e2e"],
+        "accessToken": "NjFkYzQ1ODctYjg3My00ZjcxLTg4ZmMtNmU1YmZiYjljZTE5fHJlYWQtd3JpdGU="
+      }
+    }
+  },
+  "defaultProject": "server",
+  "generators": {
+    "@nrwl/react": {
+      "application": {
+        "style": "scss",
+        "linter": "eslint",
+        "babel": true
+      },
+      "component": {
+        "style": "scss"
+      },
+      "library": {
+        "style": "scss",
+        "linter": "eslint"
+      }
+    }
+  }
+}

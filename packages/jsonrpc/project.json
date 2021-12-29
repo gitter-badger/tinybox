@@ -1,0 +1,23 @@
+{
+  "root": "packages/jsonrpc",
+  "sourceRoot": "packages/jsonrpc/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/jsonrpc/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/jsonrpc"],
+      "options": {
+        "jestConfig": "packages/jsonrpc/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

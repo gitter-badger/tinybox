@@ -1,0 +1,27 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2017", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@tinybox/assertion": ["packages/assertion/src/index.ts"],
+      "@tinybox/crypto": ["packages/crypto/src/index.ts"],
+      "@tinybox/jsonrpc": ["packages/jsonrpc/src/index.ts"],
+      "@tinybox/mail": ["packages/mail/src/index.ts"],
+      "@tinybox/models": ["packages/models/src/index.ts"]
+    },
+    "esModuleInterop": true
+  },
+  "exclude": ["node_modules", "tmp"]
+}

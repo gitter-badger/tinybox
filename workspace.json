@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "projects": {
+    "assertion": "packages/assertion",
+    "crypto": "packages/crypto",
+    "jsonrpc": "packages/jsonrpc",
+    "mail": "packages/mail",
+    "models": "packages/models",
+    "server": "packages/server",
+    "web": "packages/web",
+    "web-e2e": "packages/web-e2e"
+  }
+}
