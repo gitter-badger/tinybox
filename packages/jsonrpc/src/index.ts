@@ -11,3 +11,4 @@ export * from './lib/createBox';
 export * from './lib/getBox';
 export * from './lib/listBoxes';
 export * from './lib/updateBox';
+export * from './lib/deleteBox';
