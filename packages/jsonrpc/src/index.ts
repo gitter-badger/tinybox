@@ -10,3 +10,4 @@ export * from './lib/deleteHome';
 export * from './lib/createBox';
 export * from './lib/getBox';
 export * from './lib/listBoxes';
+export * from './lib/updateBox';
