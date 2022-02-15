@@ -1,0 +1,60 @@
+name: Deployment
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://app.tinybox.cloud
+    steps:
+      - uses: actions/checkout@v2
+        name: Checkout [main]
+      - run: npm install
+      - run: npx nx build server --prod
+      - run: npx nx build web --prod
+      - name: Build and generate tarball
+        run: |
+          mv dist/packages/web dist/packages/server/web &&
+          cd dist/packages/server &&
+          touch server.tar.gz &&
+          tar -czf server.tar.gz --exclude=server.tar.gz .
+      - name: Upload built tarball as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: server
+          path: dist/packages/server/server.tar.gz
+      - name: Upload built tarball to server
+        uses: Creepios/sftp-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USERNAME }}
+          privateKey: ${{ secrets.SSH_KEY }}
+          localPath: dist/packages/server/server.tar.gz
+          remotePath: /home/${{ secrets.SSH_USERNAME }}/server.tar.gz
+      - name: Deploying on server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            rm -rf server-tmp
+            mkdir server-tmp
+            tar -xzvf server.tar.gz -C server-tmp
+            rm server.tar.gz
+            cd server-tmp
+            npm install
+            cd ..
+            rm -rf server            
+            mv server-tmp server
+            NODE_ENV=production \
+            PORT=${{ secrets.SERVER_PORT }} \
+              pm2 restart server --update-env

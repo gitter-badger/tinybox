@@ -21,6 +21,7 @@ import { JSONRPCServerParams } from './types';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import MongoStore from 'connect-mongo';
 import mongoose from 'mongoose';
+import path from 'path';
 import proxy from 'express-http-proxy';
 import session from 'express-session';
 
@@ -86,5 +87,13 @@ app.listen(process.env.PORT, () => {
     });
   });
 
-  app.use(proxy('localhost:4200'));
+  if (process.env.NODE_ENV !== 'production') {
+    app.use(proxy('localhost:4200'));
+  } else {
+    app.use(express.static(path.join(__dirname, 'web')));
+    // If no match, we always server React's index.html file.
+    app.use((req, res, next) => {
+      res.sendFile(path.join(__dirname, 'web/index.html'));
+    });
+  }
 })();
