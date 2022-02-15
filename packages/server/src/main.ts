@@ -56,7 +56,6 @@ app.listen(process.env.PORT, () => {
   );
   app.use(express.json());
   rpcServer.addMethod('login', (params, { req }) => {
-    console.log(req.session);
     req.session['auth'] = true;
   });
 
