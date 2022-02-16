@@ -57,4 +57,5 @@ jobs:
             mv server-tmp server
             NODE_ENV=production \
             PORT=${{ secrets.SERVER_PORT }} \
+            MONGODB_URL=${{ secrets.MONGODB_URL }} \
               pm2 restart server --update-env

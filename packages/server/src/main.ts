@@ -18,8 +18,8 @@ import express, { Request, Response } from 'express';
 
 import { JSONRPCServer } from 'json-rpc-2.0';
 import { JSONRPCServerParams } from './types';
-import { MongoMemoryServer } from 'mongodb-memory-server';
 import MongoStore from 'connect-mongo';
+import { getMongoDbUrl } from './utils/mongodb';
 import mongoose from 'mongoose';
 import path from 'path';
 import proxy from 'express-http-proxy';
@@ -34,21 +34,15 @@ app.listen(process.env.PORT, () => {
 });
 
 (async () => {
-  const mongod = await MongoMemoryServer.create({
-    instance: {
-      storageEngine: 'wiredTiger',
-      dbPath: './data',
-    },
-  });
-  const uri = mongod.getUri('tinybox');
-  await mongoose.connect(uri);
-  console.log('Connected to MongoDB with URI', uri);
+  const mongoUrl = await getMongoDbUrl();
+  await mongoose.connect(mongoUrl);
+  console.log('Connected to MongoDB.');
   app.use(
     session({
       secret: 'test',
       resave: false,
       saveUninitialized: true,
-      store: MongoStore.create({ mongoUrl: uri }),
+      store: MongoStore.create({ mongoUrl: mongoUrl }),
       cookie: {
         secure: false,
       },
