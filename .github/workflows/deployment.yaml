@@ -22,6 +22,7 @@ jobs:
           npx nx build web --prod
       - name: Build and generate tarball
         run: |
+          rm -rf dist/packages/server/web &&
           mv dist/packages/web dist/packages/server/web &&
           cd dist/packages/server &&
           touch server.tar.gz &&
