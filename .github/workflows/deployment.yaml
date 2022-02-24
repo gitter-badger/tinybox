@@ -17,7 +17,9 @@ jobs:
         name: Checkout [main]
       - run: npm install
       - run: npx nx build server --prod
-      - run: npx nx build web --prod
+      - run: |
+        NX_BUILD="$(git rev-parse --short=7 HEAD)-$(date +%d%m%y-%H%M%S)" \
+        npx nx build web --prod
       - name: Build and generate tarball
         run: |
           mv dist/packages/web dist/packages/server/web &&
