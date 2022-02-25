@@ -1,18 +1,25 @@
-import { Box, Flex, HStack, Link, Stack, Text } from '@chakra-ui/react';
+import { Box, Flex, HStack, Stack, Text } from '@chakra-ui/react';
 import { HiAdjustments, HiArchive, HiUser } from 'react-icons/hi';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
+import {
+  Route,
+  Link as RouterLink,
+  Switch,
+  useLocation,
+  useRouteMatch,
+} from 'react-router-dom';
 
-import { Copyright } from '../components/Copyright';
+import { BoxesPage } from './dashboard/BoxesPage';
 import { matchPath } from 'react-router-dom';
-
-const SIDEBAR_LINKS = [
-  { title: 'Boxes', to: '/dashboard/boxes', icon: <HiArchive /> },
-  { title: 'Settings', to: '/dashboard/settings', icon: <HiAdjustments /> },
-  { title: 'Account', to: '/dashboard/account', icon: <HiUser /> },
-];
 
 export const DashboardPage = () => {
   const location = useLocation();
+  const { path, url } = useRouteMatch();
+
+  const SIDEBAR_LINKS = [
+    { title: 'Boxes', to: `${url}/boxes`, icon: <HiArchive /> },
+    { title: 'Settings', to: `${url}/settings`, icon: <HiAdjustments /> },
+    { title: 'Account', to: `${url}/account`, icon: <HiUser /> },
+  ];
 
   return (
     <Flex>
@@ -25,6 +32,7 @@ export const DashboardPage = () => {
               });
               return (
                 <Box
+                  key={link.title}
                   bgColor={match ? 'pink.50' : 'transparent'}
                   as={RouterLink}
                   to={link.to}
@@ -49,8 +57,14 @@ export const DashboardPage = () => {
           </Stack>
         </Box>
       </Box>
-      <Box flex={1} h="5000px" p={4}>
-        Page content
+      <Box flex={1} p={4}>
+        <Switch>
+          <Route path={`${path}/boxes`}>
+            <BoxesPage />
+          </Route>
+          <Route path={`${path}/settings`}>Settings</Route>
+          <Route path={`${path}/account`}>Account</Route>
+        </Switch>
       </Box>
     </Flex>
   );
