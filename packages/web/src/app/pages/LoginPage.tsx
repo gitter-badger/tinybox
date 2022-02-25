@@ -14,6 +14,8 @@ import { useEffect, useState } from 'react';
 
 import { AuthLayout } from '../layouts/AuthLayout';
 import { Copyright } from '../components/Copyright';
+import { Helmet } from 'react-helmet';
+import { getPageTitle } from '../shared/helmet';
 import { rpc } from '../api';
 import { setAuthenticated } from '../redux/actions';
 import { useHistory } from 'react-router-dom';
@@ -46,12 +48,15 @@ export const LoginPage = () => {
 
   useEffect(() => {
     if (authenticated) {
-      history.push('/');
+      history.push('/select_home');
     }
   }, [authenticated]);
 
   return (
     <AuthLayout>
+      <Helmet>
+        <title>{getPageTitle('Login')}</title>
+      </Helmet>
       <div className="flex flex-col gap-4">
         <Heading as="h1" size="xl">
           Login

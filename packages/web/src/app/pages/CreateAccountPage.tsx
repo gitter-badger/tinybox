@@ -14,7 +14,9 @@ import { useEffect, useState } from 'react';
 
 import { AuthLayout } from '../layouts/AuthLayout';
 import { Copyright } from '../components/Copyright';
+import { Helmet } from 'react-helmet';
 import PasswordStrengthBar from 'react-password-strength-bar';
+import { getPageTitle } from '../shared/helmet';
 import { rpc } from '../api';
 import { setAuthenticated } from '../redux/actions';
 import { useHistory } from 'react-router-dom';
@@ -54,6 +56,9 @@ export const CreateAccountPage = () => {
 
   return (
     <AuthLayout>
+      <Helmet>
+        <title>{getPageTitle('Create Account')}</title>
+      </Helmet>
       <div className="flex flex-col gap-4">
         <Heading as="h1" size="xl">
           Create Account
