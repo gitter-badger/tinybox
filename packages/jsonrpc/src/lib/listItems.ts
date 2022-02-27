@@ -1,6 +1,5 @@
-import { Box, Home, IBox, IItem, Item } from '@tinybox/models';
+import { Box, Home, IBox, IHome, IItem, Item } from '@tinybox/models';
 
-import { IHome } from '../../../models/src/lib/home';
 import { JSONRPCServerParams } from './types';
 import { assertNonNull } from '@tinybox/assertion';
 
