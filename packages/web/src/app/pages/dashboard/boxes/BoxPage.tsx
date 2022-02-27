@@ -10,11 +10,12 @@ import {
   Spinner,
   Stack,
 } from '@chakra-ui/react';
-import { HiChevronRight, HiPlus } from 'react-icons/hi';
+import { HiChevronRight, HiCog, HiPlus } from 'react-icons/hi';
 import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 import { BoxCard } from '../../../components/BoxCard';
+import { BoxDrawer } from '../../../components/BoxDrawer';
 import { CreateBoxDialog } from '../../../components/CreateBoxDialog';
 import { CreateItemDialog } from '../../../components/CreateItemDialog';
 import { Helmet } from 'react-helmet';
@@ -37,6 +38,7 @@ export function BoxPage() {
   const [isCreateBoxDialogOpen, setIsCreateBoxDialogOpen] = useState(false);
   const [isCreateItemDialogOpen, setIsCreateItemDialogOpen] = useState(false);
   const [parentBoxes, setParentBoxes] = useState<any[]>([]);
+  const [isBoxDrawerOpen, setIsBoxDrawerOpen] = useState(false);
 
   useEffect(() => {
     setBox(null);
@@ -132,6 +134,22 @@ export function BoxPage() {
             onCreated={() => {
               setIsCreateItemDialogOpen(false);
               reloadItems();
+            }}
+          />
+          <Button
+            leftIcon={<HiCog />}
+            variant={'ghost'}
+            onClick={() => setIsBoxDrawerOpen(true)}
+          >
+            Box Settings
+          </Button>
+          <BoxDrawer
+            isOpen={isBoxDrawerOpen}
+            boxId={boxId}
+            onClose={() => setIsBoxDrawerOpen(false)}
+            onSaved={() => {
+              setIsBoxDrawerOpen(false);
+              reloadBoxInfo();
             }}
           />
         </HStack>
