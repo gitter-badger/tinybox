@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from '@chakra-ui/react';
+import { Box, Flex, Stack, Text } from '@chakra-ui/react';
 
 import { BiCubeAlt } from 'react-icons/bi';
 import { HiArchive } from 'react-icons/hi';
@@ -27,12 +27,14 @@ export function ItemCard({ item, to }: ItemCardProps) {
         <Text fontSize={'2xl'} textColor={'gray.500'}>
           <BiCubeAlt />
         </Text>
-        <Text fontSize={'md'} isTruncated fontWeight={'medium'}>
-          {item.name}
+        <Stack spacing={0}>
+          <Text fontSize={'md'} isTruncated fontWeight={'medium'}>
+            {item.name}
+          </Text>
           <Text fontSize={'xs'} color={'gray.500'}>
             Quantity: {item.quantity}
           </Text>
-        </Text>
+        </Stack>
       </Flex>
     </Box>
   );

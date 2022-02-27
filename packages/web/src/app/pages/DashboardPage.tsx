@@ -4,12 +4,14 @@ import {
   Route,
   Link as RouterLink,
   Switch,
+  useHistory,
   useLocation,
   useRouteMatch,
 } from 'react-router-dom';
 
 import { BoxesPage } from './dashboard/BoxesPage';
 import { matchPath } from 'react-router-dom';
+import { useEffect } from 'react';
 
 export const DashboardPage = () => {
   const location = useLocation();
@@ -64,8 +66,20 @@ export const DashboardPage = () => {
           </Route>
           <Route path={`${path}/settings`}>Settings</Route>
           <Route path={`${path}/account`}>Account</Route>
+          <Route path={`${path}*`}>
+            <DefaultRoute />
+          </Route>
         </Switch>
       </Box>
     </Flex>
   );
 };
+
+function DefaultRoute() {
+  const history = useHistory();
+  useEffect(() => {
+    history.push(`/dashboard/boxes`);
+  }, []);
+
+  return null;
+}

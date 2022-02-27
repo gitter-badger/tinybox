@@ -61,9 +61,20 @@ export function App() {
         <Route path="/create_account">
           <CreateAccountPage />
         </Route>
+        <Route path="*">
+          <DefaultRoute />
+        </Route>
       </Switch>
     </div>
   );
+}
+
+function DefaultRoute() {
+  const history = useHistory();
+  useEffect(() => {
+    history.push('/login');
+  }, []);
+  return null;
 }
 
 export default App;
