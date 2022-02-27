@@ -2,6 +2,7 @@ import {
   createAccountHandler,
   createBoxHandler,
   createHomeHandler,
+  createItemHandler,
   deleteBoxHandler,
   deleteHomeHandler,
   getBoxHandler,
@@ -9,6 +10,7 @@ import {
   getHomeHandler,
   listBoxesHandler,
   listHomesHandler,
+  listItemHandler,
   loginHandler,
   logoutHandler,
   updateBoxHandler,
@@ -67,6 +69,8 @@ app.listen(process.env.PORT, () => {
   rpcServer.addMethod('listBoxes', listBoxesHandler);
   rpcServer.addMethod('updateBox', updateBoxHandler);
   rpcServer.addMethod('deleteBox', deleteBoxHandler);
+  rpcServer.addMethod('createItem', createItemHandler);
+  rpcServer.addMethod('listItems', listItemHandler);
 
   app.post('/jsonrpc', (req: Request, res: Response) => {
     const jsonRPCRequest = req.body;

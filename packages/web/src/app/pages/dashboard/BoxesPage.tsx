@@ -1,5 +1,6 @@
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
+import { BoxPage } from './boxes/BoxPage';
 import { RootPage } from './boxes/RootPage';
 
 export function BoxesPage() {
@@ -11,7 +12,9 @@ export function BoxesPage() {
         <Route exact path={`${path}`}>
           <RootPage />
         </Route>
-        <Route path={`${path}/:boxId`}>Box page</Route>
+        <Route path={`${path}/:boxId`}>
+          <BoxPage />
+        </Route>
       </Switch>
     </div>
   );

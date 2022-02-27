@@ -7,60 +7,49 @@ import {
   AlertDialogOverlay,
   Button,
   Input,
-  Spinner,
+  Stack,
+  Text,
 } from '@chakra-ui/react';
 import { HiCheck, HiX } from 'react-icons/hi';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { ErrorAlert } from './ErrorAlert';
+import { logout as logoutAction } from '../redux/actions';
 import { rpc } from '../api';
-import { useSelector } from 'react-redux';
 
 export type LogoutDialogProps = {
   isOpen: boolean;
-  parentId?: string;
+  boxId: string;
   onClose: () => void;
   onCreated: () => void;
 };
 
-export function CreateBoxDialog({
+export function CreateItemDialog({
   isOpen,
-  parentId,
   onClose,
   onCreated,
+  boxId,
 }: LogoutDialogProps) {
   const cancelRef = React.useRef(null);
   const [errorText, setErrorText] = useState('');
   const [loading, setLoading] = useState(false);
   const homeId = useSelector((state: any) => state.home.homeId);
   const [name, setName] = useState('');
-  const [loadingParentInfo, setLoadingParentInfo] = useState(false);
-  const [parentBox, setParentBox] = useState<any>(null);
+  const [quantity, setQuantity] = useState(1);
 
-  const createBox = async () => {
+  const createItem = async () => {
     setErrorText('');
     setLoading(true);
     try {
-      await rpc('createBox', { homeId, parentId, name });
+      await rpc('createItem', { homeId, name, boxId, quantity });
       onCreated();
       setName('');
+      setQuantity(1);
     } catch (e: any) {
       setErrorText(e.message);
     }
     setLoading(false);
-  };
-
-  useEffect(() => {
-    if (parentId) {
-      reloadParentInfo();
-    }
-  }, [parentId]);
-
-  const reloadParentInfo = async () => {
-    setLoadingParentInfo(true);
-    const result = await rpc('getBox', { boxId: parentId, homeId });
-    setParentBox(result.box);
-    setLoadingParentInfo(false);
   };
 
   return (
@@ -71,16 +60,9 @@ export function CreateBoxDialog({
     >
       <AlertDialogOverlay>
         <AlertDialogContent>
-          {parentId ? (
-            <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Create Box in{' '}
-              {parentBox ? parentBox.name : <Spinner ml={2} size={'sm'} />}
-            </AlertDialogHeader>
-          ) : (
-            <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Create Box
-            </AlertDialogHeader>
-          )}
+          <AlertDialogHeader fontSize="lg" fontWeight="bold">
+            Create Item
+          </AlertDialogHeader>
 
           {errorText ? (
             <AlertDialogBody>
@@ -89,12 +71,19 @@ export function CreateBoxDialog({
           ) : null}
 
           <AlertDialogBody>
-            <Input
-              placeholder="Name"
-              disabled={loadingParentInfo}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
+            <Stack gap={2}>
+              <Input
+                placeholder="Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              <Input
+                type={'number'}
+                placeholder="Quantity"
+                value={quantity}
+                onChange={(e) => setQuantity(parseInt(e.target.value))}
+              />
+            </Stack>
           </AlertDialogBody>
 
           <AlertDialogFooter>
@@ -102,17 +91,16 @@ export function CreateBoxDialog({
               ref={cancelRef}
               onClick={onClose}
               leftIcon={<HiX />}
-              disabled={loading || loadingParentInfo}
+              disabled={loading}
             >
               Cancel
             </Button>
             <Button
               colorScheme="red"
-              onClick={createBox}
+              onClick={createItem}
               ml={3}
               leftIcon={<HiCheck />}
               isLoading={loading}
-              disabled={loadingParentInfo}
             >
               Create
             </Button>

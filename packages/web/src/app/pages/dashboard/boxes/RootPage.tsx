@@ -3,6 +3,7 @@ import { HiArchive, HiPlus } from 'react-icons/hi';
 import { Link, useRouteMatch } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
+import { BoxCard } from '../../../components/BoxCard';
 import { CreateBoxDialog } from '../../../components/CreateBoxDialog';
 import { Helmet } from 'react-helmet';
 import { getPageTitle } from '../../../shared/helmet';
@@ -53,29 +54,7 @@ export function RootPage() {
       </Box>
       <Flex mt={4} gap={4} flexWrap={'wrap'}>
         {boxes.map((box) => {
-          return (
-            <Box
-              as={Link}
-              to={`${url}/${box.id}`}
-              display={'inline-block'}
-              borderWidth={2}
-              width={'300px'}
-              maxWidth={'100%'}
-              p={6}
-              borderRadius={'lg'}
-              key={box.id}
-              className="cursor-pointer hover:bg-gray-100 active:bg-gray-200"
-            >
-              <Flex align={'center'} gap={2}>
-                <Text fontSize={'2xl'} textColor={'gray.500'}>
-                  <HiArchive />
-                </Text>
-                <Text fontSize={'md'} isTruncated fontWeight={'medium'}>
-                  {box.name}
-                </Text>
-              </Flex>
-            </Box>
-          );
+          return <BoxCard key={box.id} box={box} to={`${url}/${box.id}`} />;
         })}
       </Flex>
     </div>
