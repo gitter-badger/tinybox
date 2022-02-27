@@ -1,5 +1,8 @@
 import {
   Box,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
   Button,
   Flex,
   HStack,
@@ -7,15 +10,18 @@ import {
   Spinner,
   Stack,
 } from '@chakra-ui/react';
+import { HiChevronRight, HiPlus } from 'react-icons/hi';
+import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 import { BoxCard } from '../../../components/BoxCard';
 import { CreateBoxDialog } from '../../../components/CreateBoxDialog';
 import { CreateItemDialog } from '../../../components/CreateItemDialog';
-import { HiPlus } from 'react-icons/hi';
+import { Helmet } from 'react-helmet';
 import { ItemCard } from '../../../components/ItemCard';
+import { NoItemBadge } from '../../../components/NoItemBadge';
+import { getParents } from '../../../shared/boxHelpers';
 import { rpc } from '../../../api';
-import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 type BoxPageParams = {
@@ -30,12 +36,14 @@ export function BoxPage() {
   const [items, setItems] = useState<any[]>([]);
   const [isCreateBoxDialogOpen, setIsCreateBoxDialogOpen] = useState(false);
   const [isCreateItemDialogOpen, setIsCreateItemDialogOpen] = useState(false);
+  const [parentBoxes, setParentBoxes] = useState<any[]>([]);
 
   useEffect(() => {
     setBox(null);
     setChildBoxes([]);
 
     reloadBoxInfo();
+    reloadParentsInfo();
     reloadChildBoxes();
     reloadItems();
   }, [boxId]);
@@ -43,6 +51,16 @@ export function BoxPage() {
   const reloadBoxInfo = async () => {
     const result = await rpc('getBox', { boxId, homeId });
     setBox(result.box);
+  };
+
+  const reloadParentsInfo = async () => {
+    const parentIds = await getParents(homeId, boxId);
+    const parents = [];
+    for (const parentId of parentIds) {
+      const result = await rpc('getBox', { homeId, boxId: parentId });
+      parents.push(result.box);
+    }
+    setParentBoxes(parents);
   };
 
   const reloadChildBoxes = async () => {
@@ -57,7 +75,31 @@ export function BoxPage() {
 
   return (
     <Stack spacing={4}>
+      <Helmet>
+        <title>{box ? box.name : 'Loading'} - Tinybox</title>
+      </Helmet>
       <Heading>{box ? box.name : <Spinner />}</Heading>
+      <Breadcrumb
+        fontWeight="medium"
+        fontSize="sm"
+        separator={<HiChevronRight />}
+      >
+        <BreadcrumbItem>
+          <BreadcrumbLink as={Link} to={`/dashboard/boxes`}>
+            Boxes
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        {parentBoxes.map((box) => {
+          return (
+            <BreadcrumbItem key={box.id}>
+              <BreadcrumbLink as={Link} to={`/dashboard/boxes/${box.id}`}>
+                {box.name}
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+          );
+        })}
+      </Breadcrumb>
+
       <Box>
         <HStack spacing={2}>
           <Button
@@ -96,6 +138,11 @@ export function BoxPage() {
       </Box>
       <Box>
         <Heading fontSize={'2xl'}>Items</Heading>
+        {items.length === 0 && (
+          <Box mt={4}>
+            <NoItemBadge text="Nothing in this box." />
+          </Box>
+        )}
         <Flex mt={4} gap={4} flexWrap={'wrap'}>
           {items.map((item) => {
             return (
@@ -110,6 +157,11 @@ export function BoxPage() {
       </Box>
       <Box>
         <Heading fontSize={'2xl'}>Boxes</Heading>
+        {childBoxes.length === 0 && (
+          <Box mt={4}>
+            <NoItemBadge text="No child box in this box." />
+          </Box>
+        )}
         <Flex mt={4} gap={4} flexWrap={'wrap'}>
           {childBoxes.map((box) => {
             return (
