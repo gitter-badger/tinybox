@@ -17,6 +17,7 @@ import { HiCheck, HiCog, HiTrash } from 'react-icons/hi';
 import { useEffect, useState } from 'react';
 
 import { BiCubeAlt } from 'react-icons/bi';
+import { DeleteItemDialog } from './DeleteItemDialog';
 import { DrawerFormHeading } from './DrawerFormHeading';
 import { ErrorAlert } from './ErrorAlert';
 import { InputGroup } from './InputGroup';
@@ -44,6 +45,7 @@ export function ItemDrawer({
   const [name, setName] = useState('');
   const [quantity, setQuantity] = useState('1');
   const [errorText, setErrorText] = useState('');
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   useEffect(() => {
     if (homeId && boxId && itemId) {
@@ -146,9 +148,19 @@ export function ItemDrawer({
                     colorScheme={'red'}
                     leftIcon={<HiTrash />}
                     disabled={saving}
+                    onClick={() => setIsDeleteDialogOpen(true)}
                   >
                     Delete Item
                   </Button>
+                  <DeleteItemDialog
+                    item={item}
+                    isOpen={isDeleteDialogOpen}
+                    onClose={() => setIsDeleteDialogOpen(false)}
+                    onDeleted={() => {
+                      setIsDeleteDialogOpen(false);
+                      onSaved();
+                    }}
+                  />
                 </Stack>
               </Box>
             </Stack>

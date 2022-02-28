@@ -182,6 +182,7 @@ export function BoxPage() {
           isOpen={isItemDrawerOpen}
           onClose={() => {
             setIsItemDrawerOpen(false);
+            setSelectedItemId('');
           }}
           onSaved={() => {
             setIsItemDrawerOpen(false);

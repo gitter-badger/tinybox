@@ -5,6 +5,7 @@ import {
   createItemHandler,
   deleteBoxHandler,
   deleteHomeHandler,
+  deleteItemHandler,
   getBoxHandler,
   getCurrentUserHandler,
   getHomeHandler,
@@ -75,6 +76,7 @@ app.listen(process.env.PORT, () => {
   rpcServer.addMethod('listItems', listItemHandler);
   rpcServer.addMethod('getItem', getItemHandler);
   rpcServer.addMethod('updateItem', updateItemHandler);
+  rpcServer.addMethod('deleteItem', deleteItemHandler);
 
   app.post('/jsonrpc', (req: Request, res: Response) => {
     const jsonRPCRequest = req.body;

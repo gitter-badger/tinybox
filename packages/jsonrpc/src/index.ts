@@ -16,3 +16,4 @@ export * from './lib/createItem';
 export * from './lib/listItems';
 export * from './lib/getItem';
 export * from './lib/updateItem';
+export * from './lib/deleteItem';
