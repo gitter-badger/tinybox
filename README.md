@@ -2,6 +2,10 @@
 
 Tinybox is a Node.js application that helps you manage things in your home.
 
+This project is still in very early stage of development, looking for contributers! You can try out an early build at [app.tinybox.cloud](https://app.tinybox.cloud)
+
+![2022-02-28 18 02 37](https://user-images.githubusercontent.com/7855724/156072934-c5e06cee-43db-40d6-bd8a-fbdc62d9c465.gif)
+
 ## Running tests
 
 Tinybox uses Jest as the test runner. It is preferred that you use Nx commands
