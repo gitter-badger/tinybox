@@ -20,6 +20,7 @@ import { CreateBoxDialog } from '../../../components/CreateBoxDialog';
 import { CreateItemDialog } from '../../../components/CreateItemDialog';
 import { Helmet } from 'react-helmet';
 import { ItemCard } from '../../../components/ItemCard';
+import { ItemDrawer } from '../../../components/ItemDrawer';
 import { NoItemBadge } from '../../../components/NoItemBadge';
 import { getParents } from '../../../shared/boxHelpers';
 import { rpc } from '../../../api';
@@ -39,6 +40,8 @@ export function BoxPage() {
   const [isCreateItemDialogOpen, setIsCreateItemDialogOpen] = useState(false);
   const [parentBoxes, setParentBoxes] = useState<any[]>([]);
   const [isBoxDrawerOpen, setIsBoxDrawerOpen] = useState(false);
+  const [isItemDrawerOpen, setIsItemDrawerOpen] = useState(false);
+  const [selectedItemId, setSelectedItemId] = useState('');
 
   useEffect(() => {
     setBox(null);
@@ -167,11 +170,22 @@ export function BoxPage() {
               <ItemCard
                 key={item.id}
                 item={item}
-                to={`/dashboard/boxes/${boxId}/items/${item.id}`}
+                onClick={() => {
+                  setIsItemDrawerOpen(true);
+                  setSelectedItemId(item.id);
+                }}
               />
             );
           })}
         </Flex>
+        <ItemDrawer
+          isOpen={isItemDrawerOpen}
+          onClose={() => {
+            setIsItemDrawerOpen(false);
+          }}
+          itemId={selectedItemId}
+          boxId={boxId}
+        />
       </Box>
       <Box>
         <Heading fontSize={'2xl'}>Boxes</Heading>

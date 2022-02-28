@@ -6,14 +6,13 @@ import { Link } from 'react-router-dom';
 
 export type ItemCardProps = {
   item: any;
-  to: string;
+  onClick: () => void;
 };
 
-export function ItemCard({ item, to }: ItemCardProps) {
+export function ItemCard({ item, onClick }: ItemCardProps) {
   return (
     <Box
-      as={Link}
-      to={to}
+      onClick={onClick}
       display={'inline-block'}
       borderWidth={2}
       width={'300px'}
