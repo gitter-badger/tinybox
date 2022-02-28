@@ -6,6 +6,22 @@ This project is still in very early stage of development, looking for contribute
 
 ![2022-02-28 18 02 37](https://user-images.githubusercontent.com/7855724/156072934-c5e06cee-43db-40d6-bd8a-fbdc62d9c465.gif)
 
+## Running locally
+
+There are two major parts to this project, a JSON RPC back-end and a React front-end. To start the JSON RPC server, run the following command
+
+```bash
+$ nx serve server
+```
+
+If you also want to run the front-end, run the following command
+
+```bash
+$ nx serve web
+```
+
+This will start a debug server for React, the JSON RPC back-end automatically proxies through the debug server, so you can simply visit http://localhost:3001 to get the full experience.
+
 ## Running tests
 
 Tinybox uses Jest as the test runner. It is preferred that you use Nx commands
