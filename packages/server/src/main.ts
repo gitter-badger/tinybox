@@ -16,6 +16,7 @@ import {
   logoutHandler,
   updateBoxHandler,
   updateHomeHandler,
+  updateItemHandler,
 } from '@tinybox/jsonrpc';
 import express, { Request, Response } from 'express';
 
@@ -73,6 +74,7 @@ app.listen(process.env.PORT, () => {
   rpcServer.addMethod('createItem', createItemHandler);
   rpcServer.addMethod('listItems', listItemHandler);
   rpcServer.addMethod('getItem', getItemHandler);
+  rpcServer.addMethod('updateItem', updateItemHandler);
 
   app.post('/jsonrpc', (req: Request, res: Response) => {
     const jsonRPCRequest = req.body;

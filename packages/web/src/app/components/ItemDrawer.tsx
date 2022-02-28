@@ -18,6 +18,7 @@ import { useEffect, useState } from 'react';
 
 import { BiCubeAlt } from 'react-icons/bi';
 import { DrawerFormHeading } from './DrawerFormHeading';
+import { ErrorAlert } from './ErrorAlert';
 import { InputGroup } from './InputGroup';
 import { rpc } from '../api';
 import { useSelector } from 'react-redux';
@@ -26,6 +27,7 @@ export type ItemDrawerProps = {
   isOpen: boolean;
   boxId: string;
   itemId: string;
+  onSaved: () => void;
   onClose: () => void;
 };
 
@@ -34,19 +36,18 @@ export function ItemDrawer({
   onClose,
   boxId,
   itemId,
+  onSaved,
 }: ItemDrawerProps) {
   const homeId = useSelector((state: any) => state.home.homeId);
   const [item, setItem] = useState<any>(null);
   const [saving, setSaving] = useState(false);
   const [name, setName] = useState('');
   const [quantity, setQuantity] = useState('1');
-
-  const saveItem = () => {
-    return null;
-  };
+  const [errorText, setErrorText] = useState('');
 
   useEffect(() => {
     if (homeId && boxId && itemId) {
+      setErrorText('');
       setItem(null);
       reloadItem();
     }
@@ -59,73 +60,102 @@ export function ItemDrawer({
     setQuantity(result.item.quantity);
   };
 
+  const saveItem = async () => {
+    setSaving(true);
+    try {
+      await rpc('updateItem', {
+        homeId,
+        boxId,
+        itemId,
+        item: {
+          name: name,
+          quantity: quantity,
+          boxId: item.boxId,
+        },
+      });
+      onSaved();
+    } catch (e: any) {
+      setErrorText(e.message);
+    }
+    setSaving(false);
+  };
+
   return (
     <Drawer isOpen={isOpen} placement="right" size="lg" onClose={onClose}>
       <DrawerOverlay />
       <DrawerContent>
-        {item ? (
-          <>
-            <DrawerCloseButton />
-            <DrawerHeader>
-              <HStack>
-                <BiCubeAlt />
-                <Text>{item.name}</Text>
-              </HStack>
-            </DrawerHeader>
-            <DrawerBody>
-              <Stack gap={4}>
-                <Box>
-                  <DrawerFormHeading
-                    title={'Preference'}
-                    description={
-                      'Common settings for the item, such as name and ID.'
-                    }
+        <DrawerCloseButton />
+        <DrawerHeader>
+          <HStack>
+            <BiCubeAlt />
+            {item ? <Text>{item.name}</Text> : <Spinner />}
+          </HStack>
+        </DrawerHeader>
+        <DrawerBody>
+          {errorText && (
+            <Box mb={4}>
+              <ErrorAlert text={errorText} onClose={() => setErrorText('')} />
+            </Box>
+          )}
+          {item ? (
+            <Stack gap={4}>
+              <Box>
+                <DrawerFormHeading
+                  title={'Preference'}
+                  description={
+                    'Common settings for the item, such as name and ID.'
+                  }
+                />
+                <Stack>
+                  <InputGroup
+                    label={'Item ID'}
+                    placeholder={'b_xxx'}
+                    disabled={true}
+                    value={item.id}
                   />
-                  <Stack>
-                    <InputGroup
-                      label={'Item ID'}
-                      placeholder={'b_xxx'}
-                      disabled={true}
-                      value={item.id}
-                    />
-                    <InputGroup
-                      label={'Item Name'}
-                      placeholder={'Juice'}
-                      value={name}
-                      onChange={(e: any) => setName(e.target.value)}
-                      disabled={saving}
-                    />
-                    <InputGroup
-                      label={'Item Quantity'}
-                      placeholder={'1'}
-                      value={quantity}
-                      onChange={(e: any) => setQuantity(e.target.value)}
-                      disabled={saving}
-                    />
-                  </Stack>
-                </Box>
-                <Box>
-                  <DrawerFormHeading
-                    title={'Danger Zone'}
-                    description={
-                      'Dangerous actions, most actions taken here cannot be undone, please be careful before proceeding.'
-                    }
-                    color={'red.500'}
+                  <InputGroup
+                    label={'Item Name'}
+                    placeholder={'Juice'}
+                    value={name}
+                    onChange={(e: any) => setName(e.target.value)}
+                    disabled={saving}
                   />
-                  <Stack>
-                    <Button
-                      colorScheme={'red'}
-                      leftIcon={<HiTrash />}
-                      disabled={saving}
-                    >
-                      Delete Item
-                    </Button>
-                  </Stack>
-                </Box>
-              </Stack>
-            </DrawerBody>
+                  <InputGroup
+                    label={'Item Quantity'}
+                    placeholder={'1'}
+                    value={quantity}
+                    onChange={(e: any) => setQuantity(e.target.value)}
+                    disabled={saving}
+                  />
+                </Stack>
+              </Box>
+              <Box>
+                <DrawerFormHeading
+                  title={'Danger Zone'}
+                  description={
+                    'Dangerous actions, most actions taken here cannot be undone, please be careful before proceeding.'
+                  }
+                  color={'red.500'}
+                />
+                <Stack>
+                  <Button
+                    colorScheme={'red'}
+                    leftIcon={<HiTrash />}
+                    disabled={saving}
+                  >
+                    Delete Item
+                  </Button>
+                </Stack>
+              </Box>
+            </Stack>
+          ) : (
+            <Spinner />
+          )}
+        </DrawerBody>
 
-            <DrawerFooter>
+        <DrawerFooter>
+          {item ? (
+            <>
               <Button
                 variant="outline"
                 mr={3}
@@ -142,11 +172,11 @@ export function ItemDrawer({
               >
                 Save
               </Button>
-            </DrawerFooter>
-          </>
-        ) : (
-          <Spinner />
-        )}
+            </>
+          ) : (
+            <Spinner />
+          )}
+        </DrawerFooter>
       </DrawerContent>
     </Drawer>
   );

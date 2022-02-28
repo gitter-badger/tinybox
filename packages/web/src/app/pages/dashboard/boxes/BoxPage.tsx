@@ -183,6 +183,10 @@ export function BoxPage() {
           onClose={() => {
             setIsItemDrawerOpen(false);
           }}
+          onSaved={() => {
+            setIsItemDrawerOpen(false);
+            reloadItems();
+          }}
           itemId={selectedItemId}
           boxId={boxId}
         />
