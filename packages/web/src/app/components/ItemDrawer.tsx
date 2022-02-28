@@ -54,10 +54,14 @@ export function ItemDrawer({
   }, [homeId, boxId, itemId]);
 
   const reloadItem = async () => {
-    const result = await rpc('getItem', { homeId, boxId, itemId });
-    setItem(result.item);
-    setName(result.item.name);
-    setQuantity(result.item.quantity);
+    try {
+      const result = await rpc('getItem', { homeId, boxId, itemId });
+      setItem(result.item);
+      setName(result.item.name);
+      setQuantity(result.item.quantity);
+    } catch (e: any) {
+      setErrorText(e.message);
+    }
   };
 
   const saveItem = async () => {
