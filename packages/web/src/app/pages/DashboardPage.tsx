@@ -11,14 +11,16 @@ import {
 
 import { AccountPage } from './dashboard/AccountPage';
 import { BoxesPage } from './dashboard/BoxesPage';
+import { RootState } from '../redux/reducers';
 import { SettingsPage } from './dashboard/SettingsPage';
 import { matchPath } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 export const DashboardPage = () => {
-  const authenticated = useSelector((state: any) => state.auth.authenticated);
-  const homeId = useSelector((state: any) => state.home.homeId);
+  const authenticated = useSelector(
+    (state: RootState) => state.auth.authenticated
+  );
   const history = useHistory();
   const location = useLocation();
   const { path, url } = useRouteMatch();
@@ -32,12 +34,8 @@ export const DashboardPage = () => {
   useEffect(() => {
     if (!authenticated) {
       history.push('/login');
-    } else {
-      if (!homeId) {
-        history.push('/select_home');
-      }
     }
-  }, [authenticated, homeId, history]);
+  }, [authenticated, history]);
 
   return (
     <Flex>
@@ -97,8 +95,9 @@ export const DashboardPage = () => {
 
 function DefaultRoute() {
   const history = useHistory();
+  const { url } = useRouteMatch();
   useEffect(() => {
-    history.push(`/dashboard/boxes`);
+    history.push(`${url}/boxes`);
   }, []);
 
   return null;

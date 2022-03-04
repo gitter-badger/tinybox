@@ -22,14 +22,13 @@ import { DrawerFormHeading } from './DrawerFormHeading';
 import { ErrorAlert } from './ErrorAlert';
 import { GetItemItem } from '@tinybox/jsonrpc';
 import { InputGroup } from './InputGroup';
-import { RootState } from '../redux/reducers';
 import { rpc } from '../api';
-import { useSelector } from 'react-redux';
 
 export type ItemDrawerProps = {
   isOpen: boolean;
   boxId: string;
   itemId: string;
+  homeId: string;
   onSaved: () => void;
   onClose: () => void;
 };
@@ -40,8 +39,8 @@ export function ItemDrawer({
   boxId,
   itemId,
   onSaved,
+  homeId,
 }: ItemDrawerProps) {
-  const homeId = useSelector((state: RootState) => state.home.homeId);
   const [item, setItem] = useState<GetItemItem | null>(null);
   const [saving, setSaving] = useState(false);
   const [name, setName] = useState('');
@@ -164,6 +163,7 @@ export function ItemDrawer({
                   </Button>
                   <DeleteItemDialog
                     item={item}
+                    homeId={homeId}
                     isOpen={isDeleteDialogOpen}
                     onClose={() => setIsDeleteDialogOpen(false)}
                     onDeleted={() => {

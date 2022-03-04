@@ -1,6 +1,6 @@
 import { Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
 import { HiArchive, HiPlus } from 'react-icons/hi';
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Link, useParams, useRouteMatch } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 import { BoxCard } from '../../../components/BoxCard';
@@ -12,8 +12,12 @@ import { getPageTitle } from '../../../shared/helmet';
 import { rpc } from '../../../api';
 import { useSelector } from 'react-redux';
 
+type RootPageParams = {
+  homeId: string;
+};
+
 export function RootPage() {
-  const homeId = useSelector((state: RootState) => state.home.homeId);
+  const { homeId } = useParams<RootPageParams>();
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [boxes, setBoxes] = useState<ListBoxesBox[]>([]);
   const { url } = useRouteMatch();
@@ -48,6 +52,7 @@ export function RootPage() {
         <CreateBoxDialog
           isOpen={isCreateDialogOpen}
           onClose={() => setIsCreateDialogOpen(false)}
+          homeId={homeId}
           onCreated={() => {
             setIsCreateDialogOpen(false);
             reloadBoxes();

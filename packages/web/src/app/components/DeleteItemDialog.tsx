@@ -12,15 +12,14 @@ import React, { useState } from 'react';
 
 import { ErrorAlert } from './ErrorAlert';
 import { GetItemItem } from '@tinybox/jsonrpc';
-import { RootState } from '../redux/reducers';
 import { rpc } from '../api';
-import { useSelector } from 'react-redux';
 
 export type DeleteItemDialogProps = {
   isOpen: boolean;
   onClose: () => void;
   onDeleted: () => void;
   item: GetItemItem;
+  homeId: string;
 };
 
 export function DeleteItemDialog({
@@ -28,8 +27,8 @@ export function DeleteItemDialog({
   onClose,
   item,
   onDeleted,
+  homeId,
 }: DeleteItemDialogProps) {
-  const homeId = useSelector((state: RootState) => state.home.homeId);
   const cancelRef = React.useRef(null);
   const [errorText, setErrorText] = useState('');
   const [loading, setLoading] = useState(false);

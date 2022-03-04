@@ -13,15 +13,14 @@ import { HiCheck, HiX } from 'react-icons/hi';
 import React, { useState } from 'react';
 
 import { ErrorAlert } from './ErrorAlert';
-import { RootState } from '../redux/reducers';
 import { rpc } from '../api';
-import { useSelector } from 'react-redux';
 
 export type LogoutDialogProps = {
   isOpen: boolean;
   boxId: string;
   onClose: () => void;
   onCreated: () => void;
+  homeId: string;
 };
 
 export function CreateItemDialog({
@@ -29,11 +28,11 @@ export function CreateItemDialog({
   onClose,
   onCreated,
   boxId,
+  homeId,
 }: LogoutDialogProps) {
   const cancelRef = React.useRef(null);
   const [errorText, setErrorText] = useState('');
   const [loading, setLoading] = useState(false);
-  const homeId = useSelector((state: RootState) => state.home.homeId);
   const [name, setName] = useState('');
   const [quantity, setQuantity] = useState(1);
 

@@ -1,9 +1,4 @@
-import {
-  LOGOUT,
-  SET_AUTHENTICATED,
-  SET_CURRENT_USER,
-  SET_HOME_ID,
-} from './actionTypes';
+import { LOGOUT, SET_AUTHENTICATED, SET_CURRENT_USER } from './actionTypes';
 
 import { GetCurrentUserResult } from '@tinybox/jsonrpc';
 
@@ -20,9 +15,4 @@ export const setCurrentUser = (user: GetCurrentUserResult) => ({
 export const logout = () => ({
   type: LOGOUT,
   payload: {},
-});
-
-export const setHomeId = (homeId: string | null) => ({
-  type: SET_HOME_ID,
-  payload: homeId,
 });

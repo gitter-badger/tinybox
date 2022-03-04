@@ -18,9 +18,10 @@ import { RootState } from '../redux/reducers';
 import { rpc } from '../api';
 import { useSelector } from 'react-redux';
 
-export type LogoutDialogProps = {
+export type CreateBoxDialogProps = {
   isOpen: boolean;
   parentId?: string;
+  homeId: string;
   onClose: () => void;
   onCreated: () => void;
 };
@@ -30,11 +31,11 @@ export function CreateBoxDialog({
   parentId,
   onClose,
   onCreated,
-}: LogoutDialogProps) {
+  homeId,
+}: CreateBoxDialogProps) {
   const cancelRef = React.useRef(null);
   const [errorText, setErrorText] = useState('');
   const [loading, setLoading] = useState(false);
-  const homeId = useSelector((state: RootState) => state.home.homeId);
   const [name, setName] = useState('');
   const [loadingParentInfo, setLoadingParentInfo] = useState(false);
   const [parentBox, setParentBox] = useState<GetBoxBox | null>(null);

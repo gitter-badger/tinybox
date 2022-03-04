@@ -8,13 +8,12 @@ import { InputGroup } from '../../components/InputGroup';
 import { LogoutDialog } from '../../components/LogoutDialog';
 import { getPageTitle } from '../../shared/helmet';
 import { rpc } from '../../api';
-import { setHomeId } from '../../redux/actions';
-import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 export function AccountPage() {
   const [user, setUser] = useState<GetCurrentUserResult | null>(null);
   const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
-  const dispatch = useDispatch();
+  const history = useHistory();
 
   useEffect(() => {
     reloadCurrentUser();
@@ -62,8 +61,7 @@ export function AccountPage() {
                 colorScheme={'pink'}
                 leftIcon={<HiOutlineSwitchHorizontal />}
                 onClick={() => {
-                  window.localStorage.removeItem('homeId');
-                  dispatch(setHomeId(null));
+                  history.push('/select_home');
                 }}
               >
                 Switch Home

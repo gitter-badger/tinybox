@@ -8,11 +8,16 @@ import { InputGroup } from '../../components/InputGroup';
 import { RootState } from '../../redux/reducers';
 import { getPageTitle } from '../../shared/helmet';
 import { rpc } from '../../api';
+import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
+type SettingsPageParams = {
+  homeId: string;
+};
+
 export const SettingsPage = () => {
+  const { homeId } = useParams<SettingsPageParams>();
   const [home, setHome] = useState<GetHomeHome | null>(null);
-  const homeId = useSelector((state: RootState) => state.home.homeId);
   const [saving, setSaving] = useState(false);
   const [name, setName] = useState('');
 

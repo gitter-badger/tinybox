@@ -26,12 +26,18 @@ import { useSelector } from 'react-redux';
 export type BoxDrawerProps = {
   isOpen: boolean;
   boxId: string;
+  homeId: string;
   onClose: () => void;
   onSaved: () => void;
 };
 
-export function BoxDrawer({ isOpen, onClose, boxId, onSaved }: BoxDrawerProps) {
-  const homeId = useSelector((state: RootState) => state.home.homeId);
+export function BoxDrawer({
+  isOpen,
+  onClose,
+  boxId,
+  onSaved,
+  homeId,
+}: BoxDrawerProps) {
   const [box, setBox] = useState<GetBoxBox | null>(null);
   const [name, setName] = useState('');
   const [saving, setSaving] = useState(false);

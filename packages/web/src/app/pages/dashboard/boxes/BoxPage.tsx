@@ -34,12 +34,12 @@ import { rpc } from '../../../api';
 import { useSelector } from 'react-redux';
 
 type BoxPageParams = {
+  homeId: string;
   boxId: string;
 };
 
 export function BoxPage() {
-  const homeId = useSelector((state: RootState) => state.home.homeId);
-  const { boxId } = useParams<BoxPageParams>();
+  const { homeId, boxId } = useParams<BoxPageParams>();
   const [box, setBox] = useState<GetBoxBox | null>(null);
   const [childBoxes, setChildBoxes] = useState<ListBoxesBox[]>([]);
   const [items, setItems] = useState<ListItemsItem[]>([]);
@@ -97,14 +97,17 @@ export function BoxPage() {
         separator={<HiChevronRight />}
       >
         <BreadcrumbItem>
-          <BreadcrumbLink as={Link} to={`/dashboard/boxes`}>
+          <BreadcrumbLink as={Link} to={`/dashboard/${homeId}/boxes`}>
             Boxes
           </BreadcrumbLink>
         </BreadcrumbItem>
         {parentBoxes.map((box) => {
           return (
             <BreadcrumbItem key={box.id}>
-              <BreadcrumbLink as={Link} to={`/dashboard/boxes/${box.id}`}>
+              <BreadcrumbLink
+                as={Link}
+                to={`/dashboard/${homeId}/boxes/${box.id}`}
+              >
                 {box.name}
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -123,6 +126,7 @@ export function BoxPage() {
           </Button>
           <CreateBoxDialog
             isOpen={isCreateBoxDialogOpen}
+            homeId={homeId}
             onClose={() => setIsCreateBoxDialogOpen(false)}
             parentId={boxId}
             onCreated={() => {
@@ -139,6 +143,7 @@ export function BoxPage() {
           </Button>
           <CreateItemDialog
             isOpen={isCreateItemDialogOpen}
+            homeId={homeId}
             boxId={boxId}
             onClose={() => setIsCreateItemDialogOpen(false)}
             onCreated={() => {
@@ -156,6 +161,7 @@ export function BoxPage() {
           <BoxDrawer
             isOpen={isBoxDrawerOpen}
             boxId={boxId}
+            homeId={homeId}
             onClose={() => setIsBoxDrawerOpen(false)}
             onSaved={() => {
               setIsBoxDrawerOpen(false);
@@ -187,6 +193,7 @@ export function BoxPage() {
         </Flex>
         <ItemDrawer
           isOpen={isItemDrawerOpen}
+          homeId={homeId}
           onClose={() => {
             setIsItemDrawerOpen(false);
             setSelectedItemId('');
@@ -212,7 +219,7 @@ export function BoxPage() {
               <BoxCard
                 key={box.id}
                 box={box}
-                to={`/dashboard/boxes/${box.id}`}
+                to={`/dashboard/${homeId}/boxes/${box.id}`}
               />
             );
           })}

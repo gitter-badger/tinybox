@@ -14,7 +14,6 @@ import {
   ListHomesParams,
   ListHomesResult,
 } from '@tinybox/jsonrpc';
-import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 
 import { AuthLayout } from '../layouts/AuthLayout';
@@ -25,21 +24,19 @@ import { LogoutDialog } from '../components/LogoutDialog';
 import { RootState } from '../redux/reducers';
 import { getPageTitle } from '../shared/helmet';
 import { rpc } from '../api';
-import { setHomeId } from '../redux/actions';
 import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 export const SelectHomePage = () => {
   const authenticated = useSelector(
     (state: RootState) => state.auth.authenticated
   );
-  const homeId = useSelector((state: RootState) => state.home.homeId);
   const [loading, setLoading] = useState(false);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [name, setName] = useState('');
   const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
   const history = useHistory();
-  const dispatch = useDispatch();
 
   const [homes, setHomes] = useState<ListHomesHome[]>([]);
 
@@ -50,12 +47,6 @@ export const SelectHomePage = () => {
       reloadHomeList();
     }
   }, [authenticated, history]);
-
-  useEffect(() => {
-    if (homeId) {
-      history.push('/dashboard');
-    }
-  }, [homeId, history]);
 
   const reloadHomeList = async () => {
     try {
@@ -69,8 +60,7 @@ export const SelectHomePage = () => {
   };
 
   const selectHome = async (homeId: string) => {
-    window.localStorage.setItem('homeId', homeId);
-    dispatch(setHomeId(homeId));
+    history.push(`/dashboard/${homeId}`);
   };
 
   const createHome = async () => {

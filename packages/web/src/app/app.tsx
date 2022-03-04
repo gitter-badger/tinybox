@@ -1,5 +1,5 @@
 import { Link, Route, Switch, useHistory } from 'react-router-dom';
-import { setAuthenticated, setCurrentUser, setHomeId } from './redux/actions';
+import { setAuthenticated, setCurrentUser } from './redux/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 
@@ -23,10 +23,6 @@ export function App() {
     rpc('getCurrentUser', {})
       .then(() => {
         dispatch(setAuthenticated(true));
-        const homeId = window.localStorage.getItem('homeId');
-        if (homeId) {
-          dispatch(setHomeId(homeId));
-        }
       })
       .catch(() => {
         history.push('/login');
@@ -52,7 +48,7 @@ export function App() {
   return (
     <div>
       <Switch>
-        <Route path="/dashboard">
+        <Route path="/dashboard/:homeId">
           <DashboardPage />
         </Route>
         <Route path="/select_home">
