@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export async function rpc(method: string, params: any): Promise<any> {
+export async function rpc<T>(method: string, params: T): Promise<any> {
   const response = await axios.post(
     '/jsonrpc',
     {

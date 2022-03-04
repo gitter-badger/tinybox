@@ -10,6 +10,12 @@ import {
   Spinner,
   Stack,
 } from '@chakra-ui/react';
+import type {
+  GetBoxBox,
+  GetBoxResult,
+  ListBoxesBox,
+  ListItemsItem,
+} from '@tinybox/jsonrpc';
 import { HiChevronRight, HiCog, HiPlus } from 'react-icons/hi';
 import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -22,6 +28,7 @@ import { Helmet } from 'react-helmet';
 import { ItemCard } from '../../../components/ItemCard';
 import { ItemDrawer } from '../../../components/ItemDrawer';
 import { NoItemBadge } from '../../../components/NoItemBadge';
+import { RootState } from '../../../redux/reducers';
 import { getParents } from '../../../shared/boxHelpers';
 import { rpc } from '../../../api';
 import { useSelector } from 'react-redux';
@@ -31,14 +38,14 @@ type BoxPageParams = {
 };
 
 export function BoxPage() {
-  const homeId = useSelector((state: any) => state.home.homeId);
+  const homeId = useSelector((state: RootState) => state.home.homeId);
   const { boxId } = useParams<BoxPageParams>();
-  const [box, setBox] = useState<any>(null);
-  const [childBoxes, setChildBoxes] = useState<any[]>([]);
-  const [items, setItems] = useState<any[]>([]);
+  const [box, setBox] = useState<GetBoxBox | null>(null);
+  const [childBoxes, setChildBoxes] = useState<ListBoxesBox[]>([]);
+  const [items, setItems] = useState<ListItemsItem[]>([]);
   const [isCreateBoxDialogOpen, setIsCreateBoxDialogOpen] = useState(false);
   const [isCreateItemDialogOpen, setIsCreateItemDialogOpen] = useState(false);
-  const [parentBoxes, setParentBoxes] = useState<any[]>([]);
+  const [parentBoxes, setParentBoxes] = useState<GetBoxBox[]>([]);
   const [isBoxDrawerOpen, setIsBoxDrawerOpen] = useState(false);
   const [isItemDrawerOpen, setIsItemDrawerOpen] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState('');
@@ -54,7 +61,7 @@ export function BoxPage() {
   }, [boxId]);
 
   const reloadBoxInfo = async () => {
-    const result = await rpc('getBox', { boxId, homeId });
+    const result: GetBoxResult = await rpc('getBox', { boxId, homeId });
     setBox(result.box);
   };
 

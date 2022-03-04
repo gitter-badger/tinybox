@@ -33,8 +33,10 @@ export function LogoutDialog({ isOpen, onClose }: LogoutDialogProps) {
       await rpc('logout', {});
       window.localStorage.removeItem('homeId');
       dispatch(logoutAction());
-    } catch (e: any) {
-      setErrorText(e.message);
+    } catch (e) {
+      if (e instanceof Error) {
+        setErrorText(e.message);
+      }
     }
     setLoading(false);
   };

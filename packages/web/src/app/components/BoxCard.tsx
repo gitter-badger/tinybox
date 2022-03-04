@@ -2,9 +2,10 @@ import { Box, Flex, Text } from '@chakra-ui/react';
 
 import { HiArchive } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
+import { ListBoxesBox } from '@tinybox/jsonrpc';
 
 export type BoxCardProps = {
-  box: any;
+  box: ListBoxesBox;
   to: string;
 };
 

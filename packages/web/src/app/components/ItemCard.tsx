@@ -3,9 +3,10 @@ import { Box, Flex, Stack, Text } from '@chakra-ui/react';
 import { BiCubeAlt } from 'react-icons/bi';
 import { HiArchive } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
+import { ListItemsItem } from '@tinybox/jsonrpc';
 
 export type ItemCardProps = {
-  item: any;
+  item: ListItemsItem;
   onClick: () => void;
 };
 

@@ -8,15 +8,14 @@ import {
   Button,
   Input,
   Stack,
-  Text,
 } from '@chakra-ui/react';
 import { HiCheck, HiX } from 'react-icons/hi';
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
 import { ErrorAlert } from './ErrorAlert';
-import { logout as logoutAction } from '../redux/actions';
+import { RootState } from '../redux/reducers';
 import { rpc } from '../api';
+import { useSelector } from 'react-redux';
 
 export type LogoutDialogProps = {
   isOpen: boolean;
@@ -34,7 +33,7 @@ export function CreateItemDialog({
   const cancelRef = React.useRef(null);
   const [errorText, setErrorText] = useState('');
   const [loading, setLoading] = useState(false);
-  const homeId = useSelector((state: any) => state.home.homeId);
+  const homeId = useSelector((state: RootState) => state.home.homeId);
   const [name, setName] = useState('');
   const [quantity, setQuantity] = useState(1);
 
@@ -46,8 +45,10 @@ export function CreateItemDialog({
       onCreated();
       setName('');
       setQuantity(1);
-    } catch (e: any) {
-      setErrorText(e.message);
+    } catch (e) {
+      if (e instanceof Error) {
+        setErrorText(e.message);
+      }
     }
     setLoading(false);
   };

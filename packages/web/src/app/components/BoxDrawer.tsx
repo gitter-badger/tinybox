@@ -13,11 +13,13 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
+import { GetBoxBox, GetBoxParams, GetBoxResult } from '@tinybox/jsonrpc';
 import { HiCheck, HiCog, HiTrash } from 'react-icons/hi';
 import { useEffect, useState } from 'react';
 
 import { DrawerFormHeading } from './DrawerFormHeading';
 import { InputGroup } from './InputGroup';
+import { RootState } from '../redux/reducers';
 import { rpc } from '../api';
 import { useSelector } from 'react-redux';
 
@@ -29,8 +31,8 @@ export type BoxDrawerProps = {
 };
 
 export function BoxDrawer({ isOpen, onClose, boxId, onSaved }: BoxDrawerProps) {
-  const homeId = useSelector((state: any) => state.home.homeId);
-  const [box, setBox] = useState<any>(null);
+  const homeId = useSelector((state: RootState) => state.home.homeId);
+  const [box, setBox] = useState<GetBoxBox | null>(null);
   const [name, setName] = useState('');
   const [saving, setSaving] = useState(false);
 
@@ -39,23 +41,30 @@ export function BoxDrawer({ isOpen, onClose, boxId, onSaved }: BoxDrawerProps) {
   }, [boxId]);
 
   const reloadBox = async () => {
-    const result = await rpc('getBox', { boxId, homeId });
+    const result: GetBoxResult = await rpc<GetBoxParams>('getBox', {
+      boxId,
+      homeId,
+    });
     setBox(result.box);
     setName(result.box.name);
   };
 
   const saveBox = async () => {
-    setSaving(true);
-    await rpc('updateBox', {
-      boxId,
-      homeId,
-      box: {
-        name: name,
-        parentId: box.parentId,
-      },
-    });
-    setSaving(false);
-    onSaved();
+    // Check to see if box is null, null case should never happen as the UI
+    // is blocked until box is non-null.
+    if (box) {
+      setSaving(true);
+      await rpc('updateBox', {
+        boxId,
+        homeId,
+        box: {
+          name: name,
+          parentId: box.parentId,
+        },
+      });
+      setSaving(false);
+      onSaved();
+    }
   };
 
   if (!box) return <Spinner />;
@@ -86,7 +95,7 @@ export function BoxDrawer({ isOpen, onClose, boxId, onSaved }: BoxDrawerProps) {
                   label={'Box Name'}
                   placeholder={'Fridge'}
                   value={name}
-                  onChange={(e: any) => setName(e.target.value)}
+                  onChange={(e) => setName(e.target.value)}
                   disabled={saving}
                 />
                 <InputGroup

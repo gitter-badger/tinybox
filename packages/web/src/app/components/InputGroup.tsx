@@ -1,11 +1,13 @@
 import { Input, Stack, Text } from '@chakra-ui/react';
 
+import { ChangeEvent } from 'react';
+
 export type InputGroupProps = {
   label: string;
   placeholder: string;
   disabled?: boolean;
   value?: string;
-  onChange?: any;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
 export function InputGroup({

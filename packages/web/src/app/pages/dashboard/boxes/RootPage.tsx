@@ -6,14 +6,16 @@ import { useEffect, useState } from 'react';
 import { BoxCard } from '../../../components/BoxCard';
 import { CreateBoxDialog } from '../../../components/CreateBoxDialog';
 import { Helmet } from 'react-helmet';
+import { ListBoxesBox } from '@tinybox/jsonrpc';
+import { RootState } from '../../../redux/reducers';
 import { getPageTitle } from '../../../shared/helmet';
 import { rpc } from '../../../api';
 import { useSelector } from 'react-redux';
 
 export function RootPage() {
-  const homeId = useSelector((state: any) => state.home.homeId);
+  const homeId = useSelector((state: RootState) => state.home.homeId);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
-  const [boxes, setBoxes] = useState<any[]>([]);
+  const [boxes, setBoxes] = useState<ListBoxesBox[]>([]);
   const { url } = useRouteMatch();
 
   useEffect(() => {

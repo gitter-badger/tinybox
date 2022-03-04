@@ -20,7 +20,9 @@ import { BiCubeAlt } from 'react-icons/bi';
 import { DeleteItemDialog } from './DeleteItemDialog';
 import { DrawerFormHeading } from './DrawerFormHeading';
 import { ErrorAlert } from './ErrorAlert';
+import { GetItemItem } from '@tinybox/jsonrpc';
 import { InputGroup } from './InputGroup';
+import { RootState } from '../redux/reducers';
 import { rpc } from '../api';
 import { useSelector } from 'react-redux';
 
@@ -39,8 +41,8 @@ export function ItemDrawer({
   itemId,
   onSaved,
 }: ItemDrawerProps) {
-  const homeId = useSelector((state: any) => state.home.homeId);
-  const [item, setItem] = useState<any>(null);
+  const homeId = useSelector((state: RootState) => state.home.homeId);
+  const [item, setItem] = useState<GetItemItem | null>(null);
   const [saving, setSaving] = useState(false);
   const [name, setName] = useState('');
   const [quantity, setQuantity] = useState('1');
@@ -61,29 +63,37 @@ export function ItemDrawer({
       setItem(result.item);
       setName(result.item.name);
       setQuantity(result.item.quantity);
-    } catch (e: any) {
-      setErrorText(e.message);
+    } catch (e) {
+      if (e instanceof Error) {
+        setErrorText(e.message);
+      }
     }
   };
 
   const saveItem = async () => {
-    setSaving(true);
-    try {
-      await rpc('updateItem', {
-        homeId,
-        boxId,
-        itemId,
-        item: {
-          name: name,
-          quantity: quantity,
-          boxId: item.boxId,
-        },
-      });
-      onSaved();
-    } catch (e: any) {
-      setErrorText(e.message);
+    // This function should only do something if item is already loaded,
+    // item should never be null as UI is blocked if item is null.
+    if (item) {
+      setSaving(true);
+      try {
+        await rpc('updateItem', {
+          homeId,
+          boxId,
+          itemId,
+          item: {
+            name: name,
+            quantity: quantity,
+            boxId: item.boxId,
+          },
+        });
+        onSaved();
+      } catch (e) {
+        if (e instanceof Error) {
+          setErrorText(e.message);
+        }
+      }
+      setSaving(false);
     }
-    setSaving(false);
   };
 
   return (
@@ -123,14 +133,14 @@ export function ItemDrawer({
                     label={'Item Name'}
                     placeholder={'Juice'}
                     value={name}
-                    onChange={(e: any) => setName(e.target.value)}
+                    onChange={(e) => setName(e.target.value)}
                     disabled={saving}
                   />
                   <InputGroup
                     label={'Item Quantity'}
                     placeholder={'1'}
                     value={quantity}
-                    onChange={(e: any) => setQuantity(e.target.value)}
+                    onChange={(e) => setQuantity(e.target.value)}
                     disabled={saving}
                   />
                 </Stack>

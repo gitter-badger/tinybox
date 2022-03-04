@@ -16,7 +16,7 @@ export function assertNonNull(value: unknown, message: string) {
 
 export function assertEmail(value: string | null, message: string) {
   if (!isNull(value)) {
-    if (!value.match(/\S+@\S+\.\S+/)) {
+    if (!value!.match(/\S+@\S+\.\S+/)) {
       throw new Error(message);
     }
   }
@@ -28,7 +28,7 @@ export function assertMinLength(
   message: string
 ) {
   if (!isNull(value)) {
-    if (value.length < length) {
+    if (value!.length < length) {
       throw new Error(message);
     }
   }

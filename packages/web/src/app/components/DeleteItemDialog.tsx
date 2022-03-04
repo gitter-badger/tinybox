@@ -11,6 +11,8 @@ import { HiTrash, HiX } from 'react-icons/hi';
 import React, { useState } from 'react';
 
 import { ErrorAlert } from './ErrorAlert';
+import { GetItemItem } from '@tinybox/jsonrpc';
+import { RootState } from '../redux/reducers';
 import { rpc } from '../api';
 import { useSelector } from 'react-redux';
 
@@ -18,7 +20,7 @@ export type DeleteItemDialogProps = {
   isOpen: boolean;
   onClose: () => void;
   onDeleted: () => void;
-  item: any;
+  item: GetItemItem;
 };
 
 export function DeleteItemDialog({
@@ -27,7 +29,7 @@ export function DeleteItemDialog({
   item,
   onDeleted,
 }: DeleteItemDialogProps) {
-  const homeId = useSelector((state: any) => state.home.homeId);
+  const homeId = useSelector((state: RootState) => state.home.homeId);
   const cancelRef = React.useRef(null);
   const [errorText, setErrorText] = useState('');
   const [loading, setLoading] = useState(false);
@@ -38,8 +40,10 @@ export function DeleteItemDialog({
     try {
       await rpc('deleteItem', { homeId, boxId: item.boxId, itemId: item.id });
       onDeleted();
-    } catch (e: any) {
-      setErrorText(e.message);
+    } catch (e) {
+      if (e instanceof Error) {
+        setErrorText(e.message);
+      }
     }
     setLoading(false);
   };

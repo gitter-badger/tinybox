@@ -9,6 +9,11 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { HiCheck, HiLogout, HiPlus, HiX } from 'react-icons/hi';
+import {
+  ListHomesHome,
+  ListHomesParams,
+  ListHomesResult,
+} from '@tinybox/jsonrpc';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 
@@ -17,14 +22,17 @@ import { Copyright } from '../components/Copyright';
 import { ErrorAlert } from '../components/ErrorAlert';
 import { Helmet } from 'react-helmet';
 import { LogoutDialog } from '../components/LogoutDialog';
+import { RootState } from '../redux/reducers';
 import { getPageTitle } from '../shared/helmet';
 import { rpc } from '../api';
 import { setHomeId } from '../redux/actions';
 import { useHistory } from 'react-router-dom';
 
 export const SelectHomePage = () => {
-  const authenticated = useSelector((state: any) => state.auth.authenticated);
-  const homeId = useSelector((state: any) => state.home.homeId);
+  const authenticated = useSelector(
+    (state: RootState) => state.auth.authenticated
+  );
+  const homeId = useSelector((state: RootState) => state.home.homeId);
   const [loading, setLoading] = useState(false);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [errorText, setErrorText] = useState('');
@@ -33,7 +41,7 @@ export const SelectHomePage = () => {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const [homes, setHomes] = useState<any[]>([]);
+  const [homes, setHomes] = useState<ListHomesHome[]>([]);
 
   useEffect(() => {
     if (!authenticated) {
@@ -41,20 +49,22 @@ export const SelectHomePage = () => {
     } else {
       reloadHomeList();
     }
-  }, [authenticated]);
+  }, [authenticated, history]);
 
   useEffect(() => {
     if (homeId) {
       history.push('/dashboard');
     }
-  }, [homeId]);
+  }, [homeId, history]);
 
   const reloadHomeList = async () => {
     try {
-      const data = await rpc('listHomes', {});
+      const data: ListHomesResult = await rpc<ListHomesParams>('listHomes', {});
       setHomes(data.homes);
-    } catch (e: any) {
-      setErrorText(e.message);
+    } catch (e) {
+      if (e instanceof Error) {
+        setErrorText(e.message);
+      }
     }
   };
 
@@ -69,8 +79,10 @@ export const SelectHomePage = () => {
     try {
       await rpc('createHome', { name });
       await reloadHomeList();
-    } catch (e: any) {
-      setErrorText(e.message);
+    } catch (e) {
+      if (e instanceof Error) {
+        setErrorText(e.message);
+      }
     }
     setName('');
     setLoading(false);

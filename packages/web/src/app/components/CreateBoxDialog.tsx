@@ -9,10 +9,12 @@ import {
   Input,
   Spinner,
 } from '@chakra-ui/react';
+import { CreateBoxParams, GetBoxBox } from '@tinybox/jsonrpc';
 import { HiCheck, HiX } from 'react-icons/hi';
 import React, { useEffect, useState } from 'react';
 
 import { ErrorAlert } from './ErrorAlert';
+import { RootState } from '../redux/reducers';
 import { rpc } from '../api';
 import { useSelector } from 'react-redux';
 
@@ -32,20 +34,22 @@ export function CreateBoxDialog({
   const cancelRef = React.useRef(null);
   const [errorText, setErrorText] = useState('');
   const [loading, setLoading] = useState(false);
-  const homeId = useSelector((state: any) => state.home.homeId);
+  const homeId = useSelector((state: RootState) => state.home.homeId);
   const [name, setName] = useState('');
   const [loadingParentInfo, setLoadingParentInfo] = useState(false);
-  const [parentBox, setParentBox] = useState<any>(null);
+  const [parentBox, setParentBox] = useState<GetBoxBox | null>(null);
 
   const createBox = async () => {
     setErrorText('');
     setLoading(true);
     try {
-      await rpc('createBox', { homeId, parentId, name });
+      await rpc<CreateBoxParams>('createBox', { homeId, parentId, name });
       onCreated();
       setName('');
-    } catch (e: any) {
-      setErrorText(e.message);
+    } catch (e) {
+      if (e instanceof Error) {
+        setErrorText(e.message);
+      }
     }
     setLoading(false);
   };

@@ -1,3 +1,5 @@
+import { GetBoxParams, GetBoxResult } from '@tinybox/jsonrpc';
+
 import { rpc } from '../api';
 
 /**
@@ -9,10 +11,13 @@ export async function getParents(
   boxId: string
 ): Promise<string[]> {
   const parentIds = [];
-  let nextId = boxId;
+  let nextId: string | undefined = boxId;
   let depth = 0;
   while (nextId) {
-    const result = await rpc('getBox', { homeId, boxId: nextId });
+    const result: GetBoxResult = await rpc<GetBoxParams>('getBox', {
+      homeId,
+      boxId: nextId,
+    });
     parentIds.push(nextId);
     nextId = result.box.parentId;
     depth++;

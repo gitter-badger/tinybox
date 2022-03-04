@@ -1,25 +1,20 @@
-import {
-  Box,
-  Button,
-  Container,
-  HStack,
-  Heading,
-  Input,
-  Spinner,
-  Stack,
-} from '@chakra-ui/react';
+import { Box, Button, HStack, Heading, Spinner, Stack } from '@chakra-ui/react';
+import { HiLogout, HiOutlineSwitchHorizontal } from 'react-icons/hi';
 import { useEffect, useState } from 'react';
 
+import { GetCurrentUserResult } from '@tinybox/jsonrpc';
 import { Helmet } from 'react-helmet';
-import { HiLogout } from 'react-icons/hi';
 import { InputGroup } from '../../components/InputGroup';
 import { LogoutDialog } from '../../components/LogoutDialog';
 import { getPageTitle } from '../../shared/helmet';
 import { rpc } from '../../api';
+import { setHomeId } from '../../redux/actions';
+import { useDispatch } from 'react-redux';
 
 export function AccountPage() {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<GetCurrentUserResult | null>(null);
   const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     reloadCurrentUser();
@@ -63,6 +58,16 @@ export function AccountPage() {
                 isOpen={isLogoutDialogOpen}
                 onClose={() => setIsLogoutDialogOpen(false)}
               />
+              <Button
+                colorScheme={'pink'}
+                leftIcon={<HiOutlineSwitchHorizontal />}
+                onClick={() => {
+                  window.localStorage.removeItem('homeId');
+                  dispatch(setHomeId(null));
+                }}
+              >
+                Switch Home
+              </Button>
             </HStack>
           </Stack>
         ) : (

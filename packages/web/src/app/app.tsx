@@ -6,11 +6,14 @@ import { useEffect, useState } from 'react';
 import { CreateAccountPage } from './pages/CreateAccountPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { LoginPage } from './pages/LoginPage';
+import { RootState } from './redux/reducers';
 import { SelectHomePage } from './pages/SelectHomePage';
 import { rpc } from './api';
 
 export function App() {
-  const authenticated = useSelector((state: any) => state.auth.authenticated);
+  const authenticated = useSelector(
+    (state: RootState) => state.auth.authenticated
+  );
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const history = useHistory();

@@ -15,13 +15,16 @@ import { useEffect, useState } from 'react';
 import { AuthLayout } from '../layouts/AuthLayout';
 import { Copyright } from '../components/Copyright';
 import { Helmet } from 'react-helmet';
+import { RootState } from '../redux/reducers';
 import { getPageTitle } from '../shared/helmet';
 import { rpc } from '../api';
 import { setAuthenticated } from '../redux/actions';
 import { useHistory } from 'react-router-dom';
 
 export const LoginPage = () => {
-  const authenticated = useSelector((state: any) => state.auth.authenticated);
+  const authenticated = useSelector(
+    (state: RootState) => state.auth.authenticated
+  );
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -78,7 +81,7 @@ export const LoginPage = () => {
           placeholder="Email"
           value={email}
           disabled={loading}
-          onChange={(e: any) => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <InputGroup>
           <Input
@@ -86,7 +89,7 @@ export const LoginPage = () => {
             placeholder="Password"
             value={password}
             disabled={loading}
-            onChange={(e: any) => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
           />
           <InputRightElement width="4.5rem">
             <Button
