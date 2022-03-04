@@ -9,11 +9,15 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 
+import { AccountPage } from './dashboard/AccountPage';
 import { BoxesPage } from './dashboard/BoxesPage';
 import { matchPath } from 'react-router-dom';
 import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 export const DashboardPage = () => {
+  const authenticated = useSelector((state: any) => state.auth.authenticated);
+  const history = useHistory();
   const location = useLocation();
   const { path, url } = useRouteMatch();
 
@@ -22,6 +26,12 @@ export const DashboardPage = () => {
     { title: 'Settings', to: `${url}/settings`, icon: <HiAdjustments /> },
     { title: 'Account', to: `${url}/account`, icon: <HiUser /> },
   ];
+
+  useEffect(() => {
+    if (!authenticated) {
+      history.push('/login');
+    }
+  }, [authenticated, history]);
 
   return (
     <Flex>
@@ -65,7 +75,9 @@ export const DashboardPage = () => {
             <BoxesPage />
           </Route>
           <Route path={`${path}/settings`}>Settings</Route>
-          <Route path={`${path}/account`}>Account</Route>
+          <Route path={`${path}/account`}>
+            <AccountPage />
+          </Route>
           <Route path={`${path}*`}>
             <DefaultRoute />
           </Route>

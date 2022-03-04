@@ -13,7 +13,7 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
-import { HiCheck, HiCog, HiTrash } from 'react-icons/hi';
+import { HiCheck, HiTrash } from 'react-icons/hi';
 import { useEffect, useState } from 'react';
 
 import { BiCubeAlt } from 'react-icons/bi';
