@@ -25,6 +25,7 @@ jobs:
           rm -rf dist/packages/server/web &&
           mv dist/packages/web dist/packages/server/web &&
           cd dist/packages/server &&
+          mkdir data &&
           touch server.tar.gz &&
           tar -czf server.tar.gz --exclude=server.tar.gz .
       - name: Upload built tarball as artifact

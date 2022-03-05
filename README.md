@@ -11,13 +11,20 @@
   <img src="https://github.com/junzhengca/tinybox/actions/workflows/ci.yaml/badge.svg" alt="CI status badge" />
 </p>
 
+<p align="center">
+  <img src="https://i.imgur.com/ruaDmU4.gif" width="700" alt="demo" />
+</p>
+
 ---
 
-This project is still in very early stage of development, looking for contributers! You can try out an early build at [app.tinybox.cloud](https://app.tinybox.cloud)
+## Getting Started
 
-![2022-02-28 18 02 37](https://user-images.githubusercontent.com/7855724/156072934-c5e06cee-43db-40d6-bd8a-fbdc62d9c465.gif)
+For the vast majority of users, it is generally fine to just use [Tinybox Cloud](https://app.tinybox.cloud), it is a hosted version of Tinybox, currently in beta. We handle all infrastructure management and
+security updates for you.
 
-## Running locally
+If you are interested in hosting your own Tinybox instance, you can find documentations [here](https://docs.tinybox.cloud/get-started/self-hosted).
+
+## Running Locally
 
 There are two major parts to this project, a JSON RPC back-end and a React front-end. To start the JSON RPC server, run the following command
 
@@ -33,7 +40,7 @@ $ nx serve web
 
 This will start a debug server for React, the JSON RPC back-end automatically proxies through the debug server, so you can simply visit http://localhost:3001 to get the full experience.
 
-## Running tests
+## Running Tests
 
 Tinybox uses Jest as the test runner. It is preferred that you use Nx commands
 to run tests.
