@@ -28,10 +28,7 @@ import { Helmet } from 'react-helmet';
 import { ItemCard } from '../../../components/ItemCard';
 import { ItemDrawer } from '../../../components/ItemDrawer';
 import { NoItemBadge } from '../../../components/NoItemBadge';
-import { RootState } from '../../../redux/reducers';
-import { getParents } from '../../../shared/boxHelpers';
 import { rpc } from '../../../api';
-import { useSelector } from 'react-redux';
 
 type BoxPageParams = {
   homeId: string;
@@ -55,7 +52,6 @@ export function BoxPage() {
     setChildBoxes([]);
 
     reloadBoxInfo();
-    reloadParentsInfo();
     reloadChildBoxes();
     reloadItems();
   }, [boxId]);
@@ -63,16 +59,7 @@ export function BoxPage() {
   const reloadBoxInfo = async () => {
     const result: GetBoxResult = await rpc('getBox', { boxId, homeId });
     setBox(result.box);
-  };
-
-  const reloadParentsInfo = async () => {
-    const parentIds = await getParents(homeId, boxId);
-    const parents = [];
-    for (const parentId of parentIds) {
-      const result = await rpc('getBox', { homeId, boxId: parentId });
-      parents.push(result.box);
-    }
-    setParentBoxes(parents);
+    setParentBoxes(result.parentChain.reverse());
   };
 
   const reloadChildBoxes = async () => {

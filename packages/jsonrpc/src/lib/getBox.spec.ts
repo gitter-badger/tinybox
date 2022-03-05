@@ -35,6 +35,38 @@ describe('getHome', () => {
     expect(resp.box.homeId).toBe(box.homeId);
   });
 
+  it('returns box with parent chain', async () => {
+    const user = await generateUser();
+    const home = await generateHome({ ownerId: user._id });
+    const box = await generateBox({ name: 'test', homeId: home._id });
+    const box1 = await generateBox({
+      name: 'test2',
+      homeId: home._id,
+      parentId: box._id,
+    });
+    const box2 = await generateBox({
+      name: 'test3',
+      homeId: home._id,
+      parentId: box1._id,
+    });
+
+    const resp = await getBoxHandler(
+      {
+        homeId: home._id,
+        boxId: box2._id,
+      },
+      { req: fakeReq({ session: { userId: user._id } }) }
+    );
+
+    expect(resp.box).toBeTruthy();
+    expect(resp.box.id).toBe(box2._id);
+    expect(resp.box.name).toBe(box2.name);
+    expect(resp.box.homeId).toBe(box2.homeId);
+    expect(resp.parentChain.length).toBe(2);
+    expect(resp.parentChain[0].id).toBe(box1._id);
+    expect(resp.parentChain[1].id).toBe(box._id);
+  });
+
   it('errors if box not found', async () => {
     const user = await generateUser();
     const home = await generateHome({ ownerId: user._id });
