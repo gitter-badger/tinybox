@@ -8,6 +8,7 @@
 
 <p align="center">
   <a href="https://libera.chat/"><img src="https://img.shields.io/badge/IRC-%23tinybox--dev-pink" alt="IRC channel" /></a>
+  <a href="https://gitter.im/tinybox-dev/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"><img src="https://badges.gitter.im/tinybox-dev/community.svg" alt="Join the chat at https://gitter.im/tinybox-dev/community" /></a>
   <img src="https://github.com/junzhengca/tinybox/actions/workflows/ci.yaml/badge.svg" alt="CI status badge" />
 </p>
 
@@ -16,8 +17,6 @@
 </p>
 
 ---
-
-[![Join the chat at https://gitter.im/tinybox-dev/community](https://badges.gitter.im/tinybox-dev/community.svg)](https://gitter.im/tinybox-dev/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## Getting Started
 
