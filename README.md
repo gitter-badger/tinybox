@@ -17,6 +17,8 @@
 
 ---
 
+[![Join the chat at https://gitter.im/tinybox-dev/community](https://badges.gitter.im/tinybox-dev/community.svg)](https://gitter.im/tinybox-dev/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ## Getting Started
 
 For the vast majority of users, it is generally fine to just use [Tinybox Cloud](https://app.tinybox.cloud), it is a hosted version of Tinybox, currently in beta. We handle all infrastructure management and
