@@ -1,9 +1,17 @@
-# Tinybox
+<p align="center">
+  <img src="https://i.imgur.com/urpQzLM.png" width="150" />
+</p>
 
-[![https://libera.chat/](https://img.shields.io/badge/IRC-%23tinybox--dev-pink)](https://libera.chat/)
-![CI status](https://github.com/junzhengca/tinybox/actions/workflows/ci.yaml/badge.svg)
+<h1 align="center">Tinybox</h1>
 
-Tinybox is a Node.js application that helps you manage things in your home.
+<p align="center">Tinybox is a Node.js application that helps you manage things in your home.</p>
+
+<p align="center">
+  <a href="https://libera.chat/"><img src="https://img.shields.io/badge/IRC-%23tinybox--dev-pink" alt="IRC channel" /></a>
+  <img src="https://github.com/junzhengca/tinybox/actions/workflows/ci.yaml/badge.svg" alt="CI status badge" />
+</p>
+
+---
 
 This project is still in very early stage of development, looking for contributers! You can try out an early build at [app.tinybox.cloud](https://app.tinybox.cloud)
 

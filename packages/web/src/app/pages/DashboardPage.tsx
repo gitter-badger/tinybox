@@ -1,4 +1,4 @@
-import { Box, Flex, HStack, Stack, Text } from '@chakra-ui/react';
+import { Box, Flex, HStack, Heading, Stack, Text } from '@chakra-ui/react';
 import { HiAdjustments, HiArchive, HiUser } from 'react-icons/hi';
 import {
   Route,
@@ -41,7 +41,10 @@ export const DashboardPage = () => {
     <Flex>
       <Box w="200px">
         <Box sx={{ position: 'sticky', top: '0px' }} p={4}>
-          <Stack spacing={2}>
+          <Stack spacing={2} mt={2}>
+            <HStack justify={'center'} mb={4}>
+              <img src="/assets/logo.png" width="50" alt="Tinybox" />
+            </HStack>
             {SIDEBAR_LINKS.map((link) => {
               const match = matchPath(location.pathname, {
                 path: link.to,
