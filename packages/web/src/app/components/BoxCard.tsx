@@ -16,7 +16,7 @@ export function BoxCard({ box, to }: BoxCardProps) {
       to={to}
       display={'inline-block'}
       borderWidth={2}
-      width={'300px'}
+      width={{ base: '100%', sm: '300px' }}
       maxWidth={'100%'}
       p={6}
       borderRadius={'lg'}

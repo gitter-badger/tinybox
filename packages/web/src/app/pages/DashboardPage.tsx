@@ -1,5 +1,13 @@
-import { Box, Flex, HStack, Heading, Stack, Text } from '@chakra-ui/react';
-import { HiAdjustments, HiArchive, HiUser } from 'react-icons/hi';
+import {
+  Box,
+  Button,
+  Flex,
+  HStack,
+  ScaleFade,
+  Stack,
+  Text,
+} from '@chakra-ui/react';
+import { HiAdjustments, HiArchive, HiMenu, HiUser, HiX } from 'react-icons/hi';
 import {
   Route,
   Link as RouterLink,
@@ -8,13 +16,13 @@ import {
   useLocation,
   useRouteMatch,
 } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 import { AccountPage } from './dashboard/AccountPage';
 import { BoxesPage } from './dashboard/BoxesPage';
 import { RootState } from '../redux/reducers';
 import { SettingsPage } from './dashboard/SettingsPage';
 import { matchPath } from 'react-router-dom';
-import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 export const DashboardPage = () => {
@@ -22,14 +30,8 @@ export const DashboardPage = () => {
     (state: RootState) => state.auth.authenticated
   );
   const history = useHistory();
-  const location = useLocation();
-  const { path, url } = useRouteMatch();
-
-  const SIDEBAR_LINKS = [
-    { title: 'Boxes', to: `${url}/boxes`, icon: <HiArchive /> },
-    { title: 'Settings', to: `${url}/settings`, icon: <HiAdjustments /> },
-    { title: 'Account', to: `${url}/account`, icon: <HiUser /> },
-  ];
+  const { path } = useRouteMatch();
+  const [showNavigation, setShowNavigation] = useState(false);
 
   useEffect(() => {
     if (!authenticated) {
@@ -38,45 +40,46 @@ export const DashboardPage = () => {
   }, [authenticated, history]);
 
   return (
-    <Flex>
-      <Box w="200px">
-        <Box sx={{ position: 'sticky', top: '0px' }} p={4}>
+    <Flex flexDirection={{ base: 'column', sm: 'row' }}>
+      <Box
+        w={{ base: '100%', sm: '200px' }}
+        display={{ base: 'block', sm: 'block' }}
+      >
+        <Box
+          sx={{ position: 'sticky', top: '0px' }}
+          p={4}
+          pb={{ base: 0, sm: 4 }}
+        >
           <Stack spacing={2} mt={2}>
-            <HStack justify={'center'} mb={4}>
+            <HStack
+              justify={'center'}
+              justifyContent={{ base: 'space-between', sm: 'center' }}
+              mb={4}
+            >
               <img src="/assets/logo.png" width="50" alt="Tinybox" />
+              <Button
+                display={{ base: 'flex', sm: 'none' }}
+                variant={'ghost'}
+                onClick={() => setShowNavigation(!showNavigation)}
+                leftIcon={showNavigation ? <HiX /> : <HiMenu />}
+              >
+                Menu
+              </Button>
             </HStack>
-            {SIDEBAR_LINKS.map((link) => {
-              const match = matchPath(location.pathname, {
-                path: link.to,
-              });
-              return (
-                <Box
-                  key={link.title}
-                  bgColor={match ? 'pink.50' : 'transparent'}
-                  as={RouterLink}
-                  to={link.to}
-                  px={4}
-                  py={2}
-                  borderRadius={'lg'}
-                  display={'block'}
-                >
-                  <Box
-                    fontSize="sm"
-                    color={match ? 'pink.700' : 'gray.700'}
-                    fontWeight={match ? 'bold' : 'medium'}
-                  >
-                    <HStack>
-                      {link.icon}
-                      <Text>{link.title}</Text>
-                    </HStack>
-                  </Box>
-                </Box>
-              );
-            })}
+            <Box display={{ base: 'block', sm: 'none' }}>
+              <Box display={showNavigation ? 'block' : 'none'} pb={4}>
+                <ScaleFade in={showNavigation}>
+                  <SideBarItems />
+                </ScaleFade>
+              </Box>
+            </Box>
+            <Box display={{ base: 'none', sm: 'block' }}>
+              <SideBarItems />
+            </Box>
           </Stack>
         </Box>
       </Box>
-      <Box flex={1} p={4}>
+      <Box flex={1} p={4} pt={{ base: 0, sm: 4 }}>
         <Switch>
           <Route path={`${path}/boxes`}>
             <BoxesPage />
@@ -104,4 +107,47 @@ function DefaultRoute() {
   }, []);
 
   return null;
+}
+
+function SideBarItems() {
+  const location = useLocation();
+  const { url } = useRouteMatch();
+  const SIDEBAR_LINKS = [
+    { title: 'Boxes', to: `${url}/boxes`, icon: <HiArchive /> },
+    { title: 'Settings', to: `${url}/settings`, icon: <HiAdjustments /> },
+    { title: 'Account', to: `${url}/account`, icon: <HiUser /> },
+  ];
+
+  return (
+    <>
+      {SIDEBAR_LINKS.map((link) => {
+        const match = matchPath(location.pathname, {
+          path: link.to,
+        });
+        return (
+          <Box
+            key={link.title}
+            bgColor={match ? 'pink.50' : 'transparent'}
+            as={RouterLink}
+            to={link.to}
+            px={4}
+            py={2}
+            borderRadius={'lg'}
+            display={'block'}
+          >
+            <Box
+              fontSize="sm"
+              color={match ? 'pink.700' : 'gray.700'}
+              fontWeight={match ? 'bold' : 'medium'}
+            >
+              <HStack>
+                {link.icon}
+                <Text>{link.title}</Text>
+              </HStack>
+            </Box>
+          </Box>
+        );
+      })}
+    </>
+  );
 }

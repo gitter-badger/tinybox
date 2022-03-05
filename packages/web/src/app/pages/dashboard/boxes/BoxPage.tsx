@@ -109,7 +109,7 @@ export function BoxPage() {
             colorScheme={'pink'}
             leftIcon={<HiPlus />}
           >
-            Create Box
+            Box
           </Button>
           <CreateBoxDialog
             isOpen={isCreateBoxDialogOpen}
@@ -126,7 +126,7 @@ export function BoxPage() {
             colorScheme={'pink'}
             leftIcon={<HiPlus />}
           >
-            Create Item
+            Item
           </Button>
           <CreateItemDialog
             isOpen={isCreateItemDialogOpen}
@@ -143,7 +143,7 @@ export function BoxPage() {
             variant={'ghost'}
             onClick={() => setIsBoxDrawerOpen(true)}
           >
-            Box Settings
+            Settings
           </Button>
           <BoxDrawer
             isOpen={isBoxDrawerOpen}

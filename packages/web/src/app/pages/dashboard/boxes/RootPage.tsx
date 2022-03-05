@@ -47,7 +47,7 @@ export function RootPage() {
           onClick={() => setIsCreateDialogOpen(true)}
           leftIcon={<HiPlus />}
         >
-          Create Box
+          Box
         </Button>
         <CreateBoxDialog
           isOpen={isCreateDialogOpen}
